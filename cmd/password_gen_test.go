@@ -13,8 +13,9 @@ func TestGeneratePasswordCmd(t *testing.T) {
 		command string
 		want    int
 	}{
-		{command: "cmd-test pg", want: 8},
-		//{command: "cmd-test show --int 10", want: "show called: optint: 10, optstr: default"},
+		{command: "cmd-test gp", want: 8},
+		{command: "cmd-test gp -d 10", want: 10},
+		{command: "cmd-test gp --digit 10", want: 10},
 		//{command: "cmd-test show --str test", want: "show called: optint: 0, optstr: test"},
 	}
 
@@ -28,6 +29,7 @@ func TestGeneratePasswordCmd(t *testing.T) {
 		cmd.Execute()
 
 		digit, _ := strconv.Atoi(buf.String())
+		fmt.Println(digit)
 		if c.want != countDigits(digit) {
 			t.Errorf("unexpected response: want:%+v, get:%+v", c.want, countDigits(digit))
 		}

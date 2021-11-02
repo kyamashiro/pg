@@ -22,12 +22,12 @@ var (
 
 func GeneratePasswordCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "pg",
+		Use:   "gp",
 		Short: "Generate password.",
 		Long:  `Generate password command.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			//fmt.Printf("show called: optint: %d, optstr: %d", o.d, o.c)
-			n, err := generatePassword(8)
+			//fmt.Printf("show called: -d: %v\n", o.d)
+			n, err := generatePassword(o.d)
 
 			if err != nil {
 				panic(err)
@@ -35,13 +35,13 @@ func GeneratePasswordCmd() *cobra.Command {
 			cmd.Printf(n)
 		},
 	}
-	cmd.Flags().IntVarP(&o.d, "digit", "d", 0, "Set the number of digits in the password.")
+	cmd.Flags().IntVarP(&o.d, "digit", "d", 8, "Set the number of digits in the password. Default number of digits is 8.")
 	cmd.Flags().BoolVarP(&o.c, "character", "c", false, "character option")
 
 	return cmd
 }
 
-const otpChars = "1234567890"
+const numberChars = "1234567890"
 
 func generatePassword(length int) (string, error) {
 	buffer := make([]byte, length)
@@ -50,9 +50,9 @@ func generatePassword(length int) (string, error) {
 		return "", err
 	}
 
-	otpCharsLength := len(otpChars)
+	charsLength := len(numberChars)
 	for i := 0; i < length; i++ {
-		buffer[i] = otpChars[int(buffer[i])%otpCharsLength]
+		buffer[i] = numberChars[int(buffer[i])%charsLength]
 	}
 
 	return string(buffer), nil
