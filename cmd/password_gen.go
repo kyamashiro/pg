@@ -3,6 +3,7 @@ package cmd
 import (
 	"crypto/rand"
 	"errors"
+	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -27,18 +28,20 @@ func GeneratePasswordCmd() *cobra.Command {
 		Short: "Generate password.",
 		Long:  `Generate password command.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			n, err := generatePassword(*o)
+			password, err := generatePassword(*o)
 
 			if err != nil {
 				return err
 			}
-			cmd.Printf(n)
+			cmd.Printf("%v", password)
+			fmt.Println()
 			return nil
 		},
 	}
 	cmd.Flags().IntVarP(&o.digit, "digit", "d", 8, "Set the number of digits in the password. Default number of digits is 8.")
 	cmd.Flags().BoolVarP(&o.char, "char", "c", false, "Include lowercase letters in the generated password.")
 	cmd.Flags().BoolVarP(&o.CHAR, "CHAR", "C", false, "Include uppercase letters in the generated password.")
+	cmd.Flags().BoolVarP(&o.symbol, "symbol", "s", false, "Include symbols letters in the generated password.")
 
 	return cmd
 }
@@ -58,6 +61,10 @@ func generatePassword(options Options) (string, error) {
 	// 英大文字オプションあり
 	if options.CHAR {
 		baseChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	}
+
+	if options.symbol {
+		baseChars += "!@#$%^&*"
 	}
 
 	buffer := make([]byte, options.digit)
