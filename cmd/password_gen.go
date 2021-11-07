@@ -7,13 +7,13 @@ import (
 
 type Options struct {
 	// 桁数指定オプション
-	d int
+	digit int
 	// 英小文字オプション
-	c bool
+	char bool
 	// 英大文字オプション
-	C bool
+	CHAR bool
 	// 記号オプション
-	s bool
+	symbol bool
 }
 
 var (
@@ -27,7 +27,7 @@ func GeneratePasswordCmd() *cobra.Command {
 		Long:  `Generate password command.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			//fmt.Printf("show called: -d: %v\n", o.d)
-			n, err := generatePassword(o.d)
+			n, err := generatePassword(*o)
 
 			if err != nil {
 				panic(err)
@@ -35,27 +35,32 @@ func GeneratePasswordCmd() *cobra.Command {
 			cmd.Printf(n)
 		},
 	}
-	cmd.Flags().IntVarP(&o.d, "digit", "d", 8, "Set the number of digits in the password. Default number of digits is 8.")
-	cmd.Flags().BoolVarP(&o.c, "character", "c", false, "character option")
+	cmd.Flags().IntVarP(&o.digit, "digit", "d", 8, "Set the number of digits in the password. Default number of digits is 8.")
+	cmd.Flags().BoolVarP(&o.char, "char", "c", false, "Include lowercase letters in the generated password.")
 
 	return cmd
 }
 
-const numberChars = "1234567890"
+func generatePassword(options Options) (string, error) {
+	var baseChars = "1234567890"
 
-func generatePassword(length int) (string, error) {
-	buffer := make([]byte, length)
+	// 英小文字オプションあり
+	if options.char {
+		baseChars += "abcdefghijklmnopqrstuvwxyz"
+	}
+
+	buffer := make([]byte, options.digit)
 	_, err := rand.Read(buffer)
 	if err != nil {
 		return "", err
 	}
 
-	charsLength := len(numberChars)
-	for i := 0; i < length; i++ {
-		buffer[i] = numberChars[int(buffer[i])%charsLength]
+	var result string
+	for _, v := range buffer {
+		result += string(baseChars[int(v)%len(baseChars)])
 	}
 
-	return string(buffer), nil
+	return result, nil
 }
 
 func init() {
