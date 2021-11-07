@@ -11,5 +11,7 @@ $ pg [-c] [-C] [-d <digit>] [-s]
 ## Install
 
 ```sh
-$ go install github.com/kyamashiro/password-generator
+$ git clone https://github.com/kyamashiro/password-generator.git
+$ make build
+$ ./pg
 ```

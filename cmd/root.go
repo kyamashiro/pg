@@ -11,14 +11,9 @@ import (
 var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "",
-	Short: "Usage pg [options]",
-	Long:  ``,
-}
+var rootCmd = GeneratePasswordCmd()
 
 func Execute() {
-	rootCmd.AddCommand(GeneratePasswordCmd())
 	cobra.CheckErr(rootCmd.Execute())
 }
 
