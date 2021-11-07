@@ -38,6 +38,7 @@ func GeneratePasswordCmd() *cobra.Command {
 	}
 	cmd.Flags().IntVarP(&o.digit, "digit", "d", 8, "Set the number of digits in the password. Default number of digits is 8.")
 	cmd.Flags().BoolVarP(&o.char, "char", "c", false, "Include lowercase letters in the generated password.")
+	cmd.Flags().BoolVarP(&o.CHAR, "CHAR", "C", false, "Include uppercase letters in the generated password.")
 
 	return cmd
 }
@@ -52,6 +53,11 @@ func generatePassword(options Options) (string, error) {
 	// 英小文字オプションあり
 	if options.char {
 		baseChars += "abcdefghijklmnopqrstuvwxyz"
+	}
+
+	// 英大文字オプションあり
+	if options.CHAR {
+		baseChars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	}
 
 	buffer := make([]byte, options.digit)

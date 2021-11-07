@@ -99,3 +99,36 @@ func TestGeneratePasswordCmd_OptionChar(t *testing.T) {
 		t.Errorf("unexpected response: want:%+v, get:%+v", c.want, buf.String())
 	}
 }
+
+// 英大文字オプションテスト
+func TestGeneratePasswordCmd_OptionCHAR(t *testing.T) {
+	cases := []struct {
+		command string
+		want    bool
+	}{
+		{command: "cmd-test gp -C", want: true},
+		{command: "cmd-test gp --CHAR", want: true},
+	}
+
+	for _, c := range cases {
+		buf := new(bytes.Buffer)
+		cmd := GeneratePasswordCmd()
+		cmd.SetOutput(buf)
+		cmdArgs := strings.Split(c.command, " ")
+		fmt.Printf("cmdArgs %+v\n", cmdArgs)
+		cmd.SetArgs(cmdArgs[1:])
+		cmd.Execute()
+
+		var baseStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+		for _, c := range buf.String() {
+			for _, baseChar := range baseStr {
+				// 英子文字が生成されたパスワードに含まれている場合は終了
+				if c == baseChar {
+					return
+				}
+			}
+		}
+		t.Errorf("unexpected response: want:%+v, get:%+v", c.want, buf.String())
+	}
+}
