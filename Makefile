@@ -7,4 +7,4 @@ test: deps
 	go test -v ./...
 
 build:
-	go build -o gp main.go
+	go build -o pg main.go

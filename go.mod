@@ -1,4 +1,4 @@
-module password-generator
+module github.com/kyamashiro/password-generator
 
 go 1.17
 

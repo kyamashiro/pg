@@ -24,7 +24,7 @@ var (
 
 func GeneratePasswordCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "gp",
+		Use:   "pg",
 		Short: "Generate password.",
 		Long:  `Generate password command.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
