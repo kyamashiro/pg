@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"crypto/rand"
+	"errors"
 	"github.com/spf13/cobra"
 )
 
@@ -25,14 +26,14 @@ func GeneratePasswordCmd() *cobra.Command {
 		Use:   "gp",
 		Short: "Generate password.",
 		Long:  `Generate password command.`,
-		Run: func(cmd *cobra.Command, args []string) {
-			//fmt.Printf("show called: -d: %v\n", o.d)
+		RunE: func(cmd *cobra.Command, args []string) error {
 			n, err := generatePassword(*o)
 
 			if err != nil {
-				panic(err)
+				return err
 			}
 			cmd.Printf(n)
+			return nil
 		},
 	}
 	cmd.Flags().IntVarP(&o.digit, "digit", "d", 8, "Set the number of digits in the password. Default number of digits is 8.")
@@ -42,6 +43,10 @@ func GeneratePasswordCmd() *cobra.Command {
 }
 
 func generatePassword(options Options) (string, error) {
+	// 桁指定オプションで7以下のときエラーを返す
+	if options.digit < 8 {
+		return "", errors.New("the minimum number of digits should be at least 8 characters")
+	}
 	var baseChars = "1234567890"
 
 	// 英小文字オプションあり
