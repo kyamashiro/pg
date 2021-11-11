@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/kyamashiro/password-generator/cmd"
+import "github.com/kyamashiro/pg/cmd"
 
 func main() {
 	cmd.Execute()

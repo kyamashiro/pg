@@ -1,4 +1,4 @@
-module github.com/kyamashiro/password-generator
+module github.com/kyamashiro/pg
 
 go 1.16
 
